@@ -1,51 +1,45 @@
-
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
-/**
- * Servlet implementation class Register
- */
 @WebServlet("/Register")
 public class Register extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
+    private static final long serialVersionUID = 1L;
+
     public Register() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-	}
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.getWriter().append("Served at: ").append(request.getContextPath());
+    }
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String fname=request.getParameter("FirstName");
-		String lname=request.getParameter("lastName");
-		String Phno=request.getParameter("Phno");
-		String email=request.getParameter("EmailId");
-		String Address=request.getParameter("Address");
-		String Dob=request.getParameter("DateOfBirth");
-		String Password=request.getParameter("Password");
-		
-		Member member=new Member();
-		RegisterDAO rdao=new RegisterDAO();
-		String result=rdao.insert(member);
-		response.getWriter().print(result);
-	}
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String fname = request.getParameter("fname");
+        String lname = request.getParameter("lname");
+        String phno = request.getParameter("phno");
+        String email = request.getParameter("email");
+        String address = request.getParameter("address");
+        String dobStr = request.getParameter("dob");
+        String password = request.getParameter("password");
 
+        Date dob = null;
+        try {
+            dob = new Date(new SimpleDateFormat("yyyy-MM-dd").parse(dobStr).getTime());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Member member = new Member(fname, lname, phno, email, address, password, dob, 0.0);
+
+        RegisterDAO rdao = new RegisterDAO();
+        String result = rdao.insert(member);
+        response.getWriter().print(result);
+    }
 }

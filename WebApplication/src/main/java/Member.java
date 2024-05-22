@@ -1,108 +1,87 @@
 import java.sql.Date;
 
 public class Member {
-private String FirstName,LastName,Phno,EmailId,Address,PassWord   ;
-Date DateOfBirth;
-double CurrWalletBalance;
+    private String firstName, lastName, phno, emailId, address, password;
+    private Date dateOfBirth;
+    private double currWalletBalance;
 
+    public Member() {
+        super();
+    }
 
-public Member() {
-	super();
-}
+    public Member(String firstName, String lastName, String phno, String emailId, String address, String password, Date dateOfBirth, double currWalletBalance) {
+        super();
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phno = phno;
+        this.emailId = emailId;
+        this.address = address;
+        this.password = password;
+        this.dateOfBirth = dateOfBirth;
+        this.currWalletBalance = currWalletBalance;
+    }
 
+    public String getFirstName() {
+        return firstName;
+    }
 
-public Member(String firstName, String lastName, String phno, String emailId, String address, String passWord,
-		Date dateOfBirth, double currWalletBalance) {
-	super();
-	FirstName = firstName;
-	LastName = lastName;
-	Phno = phno;
-	EmailId = emailId;
-	Address = address;
-	PassWord = passWord;
-	DateOfBirth = dateOfBirth;
-	CurrWalletBalance = currWalletBalance;
-}
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
+    public String getLastName() {
+        return lastName;
+    }
 
-public String getFirstName() {
-	return FirstName;
-}
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
+    public String getPhno() {
+        return phno;
+    }
 
-public void setFirstName(String firstName) {
-	FirstName = firstName;
-}
+    public void setPhno(String phno) {
+        this.phno = phno;
+    }
 
+    public String getEmailId() {
+        return emailId;
+    }
 
-public String getLastName() {
-	return LastName;
-}
+    public void setEmailId(String emailId) {
+        this.emailId = emailId;
+    }
 
+    public String getAddress() {
+        return address;
+    }
 
-public void setLastName(String lastName) {
-	LastName = lastName;
-}
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
+    public String getPassword() {
+        return password;
+    }
 
-public String getPhno() {
-	return Phno;
-}
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
 
-public void setPhno(String phno) {
-	Phno = phno;
-}
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
 
+    public double getCurrWalletBalance() {
+        return currWalletBalance;
+    }
 
-public String getEmailId() {
-	return EmailId;
-}
-
-
-public void setEmailId(String emailId) {
-	EmailId = emailId;
-}
-
-
-public String getAddress() {
-	return Address;
-}
-
-
-public void setAddress(String address) {
-	Address = address;
-}
-
-
-public String getPassWord() {
-	return PassWord;
-}
-
-
-public void setPassWord(String passWord) {
-	PassWord = passWord;
-}
-
-
-public Date getDateOfBirth() {
-	return DateOfBirth;
-}
-
-
-public void setDateOfBirth(Date dateOfBirth) {
-	DateOfBirth = dateOfBirth;
-}
-
-
-public double getCurrWalletBalance() {
-	return CurrWalletBalance;
-}
-
-
-public void setCurrWalletBalance(double currWalletBalance) {
-	CurrWalletBalance = currWalletBalance;
-}
-
-
+    public void setCurrWalletBalance(double currWalletBalance) {
+        this.currWalletBalance = currWalletBalance;
+    }
 }
