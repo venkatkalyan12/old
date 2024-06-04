@@ -63,6 +63,11 @@ public class Doctor {
 	public void setHospitalDoctors(Set<HospitalDoctor> hospitalDoctors) {
 		this.hospitalDoctors = hospitalDoctors;
 	}
+
+	public void setHospital(Hospital hospital) {
+		// TODO Auto-generated method stub
+		
+	}
    
     
 }

@@ -1,9 +1,8 @@
 package com.Medical.MEmergency.config;
 
-
-import com.google.maps.GeoApiContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import com.google.maps.GeoApiContext;
 
 @Configuration
 public class GeoApiContextConfig {

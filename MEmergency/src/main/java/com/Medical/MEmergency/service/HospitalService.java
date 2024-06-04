@@ -1,12 +1,14 @@
 package com.Medical.MEmergency.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.Medical.MEmergency.config.GeoApiContextConfig;
 import com.Medical.MEmergency.dto.DoctorDto;
 import com.Medical.MEmergency.dto.HospitalDiseaseDto;
 import com.Medical.MEmergency.dto.RegisterHospitalDto;
@@ -30,7 +32,7 @@ public class HospitalService {
     private DoctorRepository doctorRepository;
     
     @Autowired
-    private GeoApiContext geoApiContext;
+    private GeoApiContextConfig geoApiContext;
     
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -48,26 +50,34 @@ public class HospitalService {
     }
 
     public boolean loginHospital(RegisterHospitalDto hospitalDto) {
-        Hospital hospital = hospitalRepository.findByUsername(hospitalDto.getUsername());
+        Hospital hospital = hospitalRepository.findByUsername(hospitalDto.getUsername()).orElse(null);
         return hospital != null && bCryptPasswordEncoder.matches(hospitalDto.getPassword(), hospital.getPassword());
     }
 
     public void addDoctor(DoctorDto doctorDto) {
-        Hospital hospital = hospitalRepository.findByUsername(doctorDto.getHospitalUsername());
-        Doctor doctor = new Doctor();
-        doctor.setName(doctorDto.getName());
-        doctor.setSpeciality(doctorDto.getSpeciality());
-        doctor.setContactNumber(doctorDto.getContactNumber());
-        doctor.setHospital(hospital);
-        doctorRepository.save(doctor);
+        Optional<Hospital> optionalHospital = hospitalRepository.findByUsername(doctorDto.getHospitalUsername());
+        if (optionalHospital.isPresent()) {
+            Hospital hospital = optionalHospital.get();
+            Doctor doctor = new Doctor();
+            doctor.setName(doctorDto.getName());
+            doctor.setSpeciality(doctorDto.getSpeciality());
+            doctor.setContactNumber(doctorDto.getContactNumber());
+            doctor.setHospital(hospital);
+            doctorRepository.save(doctor);
+        } else {
+            throw new RuntimeException("Hospital not found with username: " + doctorDto.getHospitalUsername());
+        }
     }
 
+
     public void addDisease(HospitalDiseaseDto diseaseDto) {
-        Hospital hospital = hospitalRepository.findByUsername(diseaseDto.getHospitalUsername());
-        HospitalDisease disease = new HospitalDisease();
-        disease.setDiseaseType(diseaseDto.getDiseaseType());
-        disease.setHospital(hospital);
-        hospitalDiseaseRepository.save(disease);
+        Hospital hospital = hospitalRepository.findByUsername(diseaseDto.getHospitalUsername()).orElse(null);
+        if (hospital != null) {
+            HospitalDisease disease = new HospitalDisease();
+            disease.setDiseaseType(diseaseDto.getDiseaseType());
+            disease.setHospital(hospital);
+            hospitalDiseaseRepository.save(disease);
+        }
     }
 
     public List<Hospital> findNearbyHospitals(String diseaseType, double latitude, double longitude) {
@@ -79,7 +89,7 @@ public class HospitalService {
 
         List<Hospital> hospitals = hospitalRepository.findAllById(hospitalIds);
 
-        // Filter hospitals based on distance using Google Maps API
+        // Filter hospitals based on distance using Haversine formula
         return hospitals.stream()
                 .filter(hospital -> isWithinDistance(hospital, latitude, longitude, 10)) // e.g., within 10km
                 .collect(Collectors.toList());
